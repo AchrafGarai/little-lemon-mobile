@@ -9,6 +9,7 @@ import { SplashScreen, Stack } from "expo-router";
 import { useEffect } from "react";
 import { useColorScheme } from "react-native";
 import { TamaguiProvider } from "tamagui";
+import { UserProvider } from "../lib/userProvider";
 import config from "../tamagui.config";
 export {
   // Catch any errors thrown by the Layout component.
@@ -26,8 +27,9 @@ SplashScreen.preventAutoHideAsync();
 export default function RootLayout() {
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
-    Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
-    InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
+    Inter: require("@tamagui/font-inter/otf/Inter-Regular.otf"),
+    InterBold: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
+    unset: require("@tamagui/font-inter/otf/Inter-Regular.otf"),
     ...FontAwesome.font,
   });
 
@@ -51,17 +53,18 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
-
   return (
     <TamaguiProvider
       config={config}
       defaultTheme={colorScheme === "dark" ? "dark" : "light"}
     >
       <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: "modal" }} />
-        </Stack>
+        <UserProvider>
+          <Stack>
+            <Stack.Screen name="(app)" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: "modal" }} />
+          </Stack>
+        </UserProvider>
       </ThemeProvider>
     </TamaguiProvider>
   );
